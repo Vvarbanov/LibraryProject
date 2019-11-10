@@ -1,0 +1,14 @@
+spring:
+  # Spring JDBC configuration
+  datasource:
+    url: jdbc:postgresql://localhost:5432/librarydb
+    username: postgres
+    password: password
+
+  # Spring Data JPA configuration
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+server:
+  port: 3000
