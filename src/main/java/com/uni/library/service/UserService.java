@@ -2,7 +2,6 @@ package com.uni.library.service;
 
 import com.uni.library.model.User;
 import com.uni.library.repository.UserRepository;
-import org.hibernate.sql.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +33,6 @@ public class UserService {
 
     public void insertUser(User user){
         userRepository.save(user);
-
     }
 
     public void updateUserByID(Long id, User updateUser){
