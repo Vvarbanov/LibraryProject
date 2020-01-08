@@ -19,11 +19,11 @@ public class User {
     @Column(name = "email")
     private String email;
 
-    public User(String name, String username, String password, String email) {
-        this.name = name;
-        this.username = username;
-        this.password = password;
-        this.email = email;
+    public User(User user) {
+        this.setName(user.getName());
+        this.setUsername(user.getUsername());
+        this.setPassword(user.getPassword());
+        this.setEmail(user.getEmail());
     }
 
     public User() {

@@ -1,12 +1,14 @@
 package com.uni.library.model;
 
+import com.uni.library.model.abstractModel.AbstractBook;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "books")
-public class Book extends AbstractBook{
+public class Book extends AbstractBook {
 
     @Column(name = "genre")
     private String genre;
@@ -17,10 +19,10 @@ public class Book extends AbstractBook{
     public Book () {}
 
     public Book(Book book) {
-        this.genre = book.getGenre();
-        this.author = book.getAuthor();
-        this.name = book.getName();
-        this.date = book.getDate();
+        this.setGenre(book.getGenre());
+        this.setAuthor(book.getAuthor());
+        this.setName(book.getName());
+        this.setDate(book.getDate());
     }
 
     public String getGenre() {

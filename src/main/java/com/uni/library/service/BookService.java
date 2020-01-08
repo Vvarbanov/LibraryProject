@@ -21,5 +21,24 @@ public class BookService {
         return (List<Book>) bookRepository.findAll();
     }
 
+    public Book getBookByID(Long id) {
+        if (bookRepository.findById(id).isPresent())
+            return bookRepository.findById(id).get();
+        return null;
+    }
 
+    public void deleteBookById(Long id) {
+        bookRepository.deleteById(id);
+    }
+
+    public void insertBookById(Book book) {
+        bookRepository.save(book);
+    }
+
+    public void updateBookById(Long id, Book updateBook) {
+        if (bookRepository.findById(id).isPresent()) {
+            updateBook.setId(id);
+            bookRepository.save(updateBook);
+        }
+    }
 }
