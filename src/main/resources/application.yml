@@ -4,11 +4,14 @@ spring:
     url: jdbc:postgresql://localhost:5432/librarydb
     username: postgres
     password: password
+    driver-class-name: org.postgresql.Driver
 
   # Spring Data JPA configuration
   jpa:
     hibernate:
       ddl-auto: update
+    show-sql: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
 
 server:
   port: 3000

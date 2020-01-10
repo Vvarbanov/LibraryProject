@@ -1,8 +1,10 @@
 package com.uni.library.controller;
 
+import com.uni.library.dto.UserDTO;
 import com.uni.library.model.User;
 import com.uni.library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,11 +22,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping
-    public void insertUser(@Valid @NonNull @RequestBody User user) {
-        userService.insertUser(user);
-    }
-
     @GetMapping
     public List<User> getAllUsers() {
         return userService.getAllUsers();
@@ -35,13 +32,18 @@ public class UserController {
         return userService.getUserByID(id);
     }
 
+    @PostMapping("/register")
+    public ResponseEntity insertUser(@Valid @NonNull @RequestBody UserDTO userDTO) {
+        return ResponseEntity.ok(userService.insertUser(userDTO));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity updateUserById(@PathVariable Long id, @Valid @NonNull @RequestBody UserDTO updateUser) {
+        return ResponseEntity.ok(userService.updateUserByID(id, updateUser));
+    }
+
     @DeleteMapping("/{id}")
     public void deleteUserById(@PathVariable Long id) {
         userService.deleteUserByID(id);
-    }
-
-    @PutMapping(path = "/{id}")
-    public void updateUserById(@PathVariable Long id, @Valid @NonNull @RequestBody User updateUser) {
-        userService.updateUserByID(id, updateUser);
     }
 }

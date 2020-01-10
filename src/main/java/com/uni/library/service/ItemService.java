@@ -1,23 +1,24 @@
 package com.uni.library.service;
 
+import com.uni.library.dto.ItemDTO;
 import com.uni.library.model.Item;
 import com.uni.library.repository.ItemRepository;
-import org.aspectj.asm.IRelationshipMap;
-import org.hibernate.sql.ordering.antlr.OrderByTemplateTokenTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.w3c.dom.ls.LSException;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
 public class ItemService {
 
     private final ItemRepository itemRepository;
+    private final CatalogueService catalogueService;
 
     @Autowired
-    public ItemService(ItemRepository itemRepository) {
+    public ItemService(ItemRepository itemRepository, CatalogueService catalogueService) {
         this.itemRepository = itemRepository;
+        this.catalogueService = catalogueService;
     }
 
     public List<Item> getAllItems() {
@@ -34,14 +35,36 @@ public class ItemService {
         itemRepository.deleteById(id);
     }
 
-    public void insertById(Item item) {
-        itemRepository.save(item);
+    @Transactional
+    public Long insertItem(ItemDTO itemDTO) {
+        Long id = null;
+
+        if (itemDTO != null){
+            Item newItem = new Item();
+
+            newItem.setTitle(itemDTO.getTitle());
+            newItem.setPrice(itemDTO.getPrice());
+            newItem.setManufacturer(itemDTO.getManufacturer());
+            newItem.setCatalogue(catalogueService.getCatalogueById(itemDTO.getCatalogue_id()));
+
+            id = itemRepository.save(newItem).getId();
+        }
+        return id;
     }
 
-    public void updateItemByID(Long id, Item updateItem) {
-        if (itemRepository.findById(id).isPresent()){
-            updateItem.setId(id);
-            itemRepository.save(updateItem);
+    @Transactional
+    public Long updateItemByID(Long id, ItemDTO updateItem) {
+        if (itemRepository.findById(id).isPresent() && updateItem != null){
+            Item newItem = new Item();
+
+            newItem.setId(id);
+            newItem.setTitle(updateItem.getTitle());
+            newItem.setPrice(updateItem.getPrice());
+            newItem.setManufacturer(updateItem.getManufacturer());
+            newItem.setCatalogue(catalogueService.getCatalogueById(updateItem.getCatalogue_id()));
+
+            return itemRepository.save(newItem).getId();
         }
+        return null;
     }
 }

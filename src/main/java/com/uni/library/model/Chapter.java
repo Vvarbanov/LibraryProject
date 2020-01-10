@@ -1,10 +1,9 @@
 package com.uni.library.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.uni.library.model.abstractModel.AbstractChapter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "chapters")
@@ -13,12 +12,12 @@ public class Chapter extends AbstractChapter {
     @Column(name = "content")
     private String content;
 
-    public Chapter () {}
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "book_id")
+    private Book book;
 
-    public Chapter(Chapter chapter) {
-        this.setContent(chapter.getContent());
-        this.setTitle(chapter.getTitle());
-    }
+    public Chapter () {}
 
     public String getContent() {
         return content;
@@ -26,5 +25,13 @@ public class Chapter extends AbstractChapter {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Book getBook() {
+        return book;
+    }
+
+    public void setBook(Book book) {
+        this.book = book;
     }
 }

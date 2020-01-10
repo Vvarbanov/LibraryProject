@@ -1,11 +1,13 @@
 package com.uni.library.service;
 
+import com.uni.library.dto.BookDTO;
 import com.uni.library.model.Book;
 import com.uni.library.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import javax.transaction.Transactional;
+import java.util.*;
 
 @Service
 public class BookService {
@@ -27,18 +29,60 @@ public class BookService {
         return null;
     }
 
+    public Set<String> getAllGenres(){
+        Set<String> genreSet = new TreeSet<>();
+
+        List<Book> books = (List<Book>) bookRepository.findAll();
+        for (Book currentBook: books) {
+            genreSet.add(currentBook.getGenre());
+        }
+
+        return genreSet;
+    }
+
+    public List<Book> getAllBooksByGenre(String genre) {
+        Set<String> genres = getAllGenres();
+        List<Book> booksByGenre = new ArrayList<>();
+        if (genres.contains(genre)) {
+            booksByGenre = bookRepository.findAllByGenre(genre);
+        }
+        return booksByGenre;
+    }
+
     public void deleteBookById(Long id) {
         bookRepository.deleteById(id);
     }
 
-    public void insertBookById(Book book) {
-        bookRepository.save(book);
+    @Transactional
+    public Long insertBook(BookDTO bookDTO) {
+        Long id = null;
+        if (bookDTO != null) {
+            Book newBook = new Book();
+
+            newBook.setDate(bookDTO.getDate());
+            newBook.setGenre(bookDTO.getGenre());
+            newBook.setAuthor(bookDTO.getAuthor());
+            newBook.setName(bookDTO.getName());
+
+            id = bookRepository.save(newBook).getId();
+        }
+
+        return id;
     }
 
-    public void updateBookById(Long id, Book updateBook) {
-        if (bookRepository.findById(id).isPresent()) {
-            updateBook.setId(id);
-            bookRepository.save(updateBook);
+    @Transactional
+    public Long updateBookById(Long id, BookDTO updateBook) {
+        if (bookRepository.findById(id).isPresent() && updateBook != null) {
+            Book newBook = new Book();
+
+            newBook.setId(id);
+            newBook.setName(updateBook.getName());
+            newBook.setAuthor(updateBook.getAuthor());
+            newBook.setGenre(updateBook.getGenre());
+
+            return bookRepository.save(newBook).getId();
         }
+        return null;
     }
+
 }

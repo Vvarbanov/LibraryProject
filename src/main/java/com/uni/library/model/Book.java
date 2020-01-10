@@ -2,9 +2,8 @@ package com.uni.library.model;
 
 import com.uni.library.model.abstractModel.AbstractBook;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "books")
@@ -16,14 +15,10 @@ public class Book extends AbstractBook {
     @Column(name = "author")
     private String author;
 
-    public Book () {}
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "book", fetch = FetchType.EAGER)
+    private List<Chapter> chapters;
 
-    public Book(Book book) {
-        this.setGenre(book.getGenre());
-        this.setAuthor(book.getAuthor());
-        this.setName(book.getName());
-        this.setDate(book.getDate());
-    }
+    public Book () {}
 
     public String getGenre() {
         return genre;
@@ -39,5 +34,13 @@ public class Book extends AbstractBook {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public List<Chapter> getChapters() {
+        return chapters;
+    }
+
+    public void setChapters(List<Chapter> chapters) {
+        this.chapters = chapters;
     }
 }

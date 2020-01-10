@@ -1,12 +1,14 @@
 package com.uni.library.controller;
 
+import com.uni.library.dto.ChapterDTO;
 import com.uni.library.model.Chapter;
 import com.uni.library.service.ChapterService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RequestMapping("/chapters")
@@ -23,5 +25,25 @@ public class ChapterController {
     @GetMapping
     public List<Chapter> getAllChapters() {
         return chapterService.getAllChapters();
+    }
+
+    @GetMapping("/{id}")
+    public Chapter getChapterById(@PathVariable Long id) {
+        return chapterService.getChapterById(id);
+    }
+
+    @PostMapping
+    public ResponseEntity insertChapter(@NonNull @Valid @RequestBody ChapterDTO chapterDTO) {
+        return ResponseEntity.ok(chapterService.insertChapter(chapterDTO));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity updateChapterById(@PathVariable Long id, @Valid @NonNull @RequestBody ChapterDTO updateChapter) {
+        return ResponseEntity.ok(chapterService.updateChapterById(id, updateChapter));
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteChapterById(@PathVariable Long id) {
+        chapterService.deleteChapterById(id);
     }
 }

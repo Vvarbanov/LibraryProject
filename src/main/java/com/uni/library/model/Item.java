@@ -1,10 +1,9 @@
 package com.uni.library.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.uni.library.model.abstractModel.AbstractChapter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "items")
@@ -16,11 +15,10 @@ public class Item extends AbstractChapter {
     @Column(name = "price")
     private double price;
 
-    public Item(Item item) {
-        this.setManufacturer(item.getManufacturer());
-        this.setPrice(item.getPrice());
-        this.setTitle(item.getTitle());
-    }
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "catalogue_id")
+    private Catalogue catalogue;
 
     public String getManufacturer() {
         return manufacturer;
@@ -36,5 +34,13 @@ public class Item extends AbstractChapter {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public Catalogue getCatalogue() {
+        return catalogue;
+    }
+
+    public void setCatalogue(Catalogue catalogue) {
+        this.catalogue = catalogue;
     }
 }

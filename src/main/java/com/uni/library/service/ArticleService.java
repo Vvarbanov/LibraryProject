@@ -1,20 +1,24 @@
 package com.uni.library.service;
 
+import com.uni.library.dto.ArticleDTO;
 import com.uni.library.model.Article;
 import com.uni.library.repository.ArticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
 public class ArticleService {
 
     private final ArticleRepository articleRepository;
+    private final NewspaperService newspaperService;
 
     @Autowired
-    public ArticleService(ArticleRepository articleRepository) {
+    public ArticleService(ArticleRepository articleRepository, NewspaperService newspaperService) {
         this.articleRepository = articleRepository;
+        this.newspaperService = newspaperService;
     }
 
     public List<Article> getAllArticles(){
@@ -31,14 +35,34 @@ public class ArticleService {
         articleRepository.deleteById(id);
     }
 
-    public void insertArticle(Article article) {
-        articleRepository.save(article);
+    @Transactional
+    public Long insertArticle(ArticleDTO articleDTO) {
+        Long id = null;
+
+        if (articleDTO != null){
+            Article newArticle = new Article();
+
+            newArticle.setTitle(articleDTO.getTitle());
+            newArticle.setContent(articleDTO.getContent());
+            newArticle.setNewspaper(newspaperService.getNewspaperById(articleDTO.getNewspaper_id()));
+
+            id = articleRepository.save(newArticle).getId();
+        }
+        return id;
     }
 
-    public void updateArticle(Long id, Article updateArticle) {
-        if(articleRepository.findById(id).isPresent()){
-            updateArticle.setId(id);
-            articleRepository.save(updateArticle);
+    @Transactional
+    public Long updateArticle(Long id, ArticleDTO updateArticle) {
+        if(articleRepository.findById(id).isPresent() && updateArticle != null){
+            Article newArticle = new Article();
+
+            newArticle.setId(id);
+            newArticle.setTitle(updateArticle.getTitle());
+            newArticle.setContent(updateArticle.getContent());
+            newArticle.setNewspaper(newspaperService.getNewspaperById(updateArticle.getNewspaper_id()));
+
+            return articleRepository.save(newArticle).getId();
         }
+        return null;
     }
 }

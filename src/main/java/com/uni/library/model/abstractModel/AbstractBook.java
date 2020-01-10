@@ -1,15 +1,13 @@
 package com.uni.library.model.abstractModel;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.MappedSuperclass;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @MappedSuperclass
 public abstract class AbstractBook {
 
-    @Column
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -17,6 +15,7 @@ public abstract class AbstractBook {
     private String name;
 
     @Column(name = "date")
+    @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate date;
 
     public Long getId() {

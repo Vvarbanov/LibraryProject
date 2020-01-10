@@ -1,11 +1,13 @@
 package com.uni.library.service;
 
+import com.uni.library.dto.CatalogueDTO;
 import com.uni.library.model.Catalogue;
 import com.uni.library.repository.CatalogueRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.CustomAutowireConfigurer;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -32,14 +34,32 @@ public class CatalogueService {
         catalogueRepository.deleteById(id);
     }
 
-    public void insertCatalogue(Catalogue catalogue) {
-        catalogueRepository.save(catalogue);
+    @Transactional
+    public Long insertCatalogue(CatalogueDTO catalogueDTO) {
+        Long id = null;
+
+        if (catalogueDTO != null){
+            Catalogue newCatalogue = new Catalogue();
+
+            newCatalogue.setName(catalogueDTO.getName());
+            newCatalogue.setDate(catalogueDTO.getDate());
+
+            id = catalogueRepository.save(newCatalogue).getId();
+        }
+        return id;
     }
 
-    public void updateCatalogueById(Long id, Catalogue updateCatalogue) {
-        if (catalogueRepository.findById(id).isPresent()){
-            updateCatalogue.setId(id);
-            catalogueRepository.save(updateCatalogue);
+    @Transactional
+    public Long updateCatalogueById(Long id, CatalogueDTO updateCatalogue) {
+        if (catalogueRepository.findById(id).isPresent() && updateCatalogue != null){
+            Catalogue newCatalogue = new Catalogue();
+
+            newCatalogue.setId(id);
+            newCatalogue.setName(updateCatalogue.getName());
+            newCatalogue.setDate(updateCatalogue.getDate());
+
+            return catalogueRepository.save(newCatalogue).getId();
         }
+        return null;
     }
 }
