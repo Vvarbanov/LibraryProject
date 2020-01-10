@@ -37,8 +37,12 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public void deleteUserByID(Long id){
-        userRepository.deleteById(id);
+    public Long deleteUserByID(Long id){
+        if (userRepository.findById(id).isPresent()) {
+            userRepository.deleteById(id);
+            return id;
+        }
+        return null;
     }
 
     @Transactional

@@ -43,7 +43,7 @@ public class ArticleController {
     }
 
     @DeleteMapping("{id}")
-    public void deleteArticleById(@PathVariable Long id) {
-        articleService.deleteArticleById(id);
+    public ResponseEntity deleteArticleById(@PathVariable Long id) {
+        return ResponseEntity.ok(articleService.deleteArticleById(id));
     }
 }

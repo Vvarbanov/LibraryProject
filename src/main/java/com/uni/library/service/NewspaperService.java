@@ -29,8 +29,12 @@ public class NewspaperService {
         return null;
     }
 
-    public void deleteNewspaperById(Long id) {
-        newspaperRepository.deleteById(id);
+    public Long deleteNewspaperById(Long id) {
+        if(newspaperRepository.findById(id).isPresent()) {
+            newspaperRepository.deleteById(id);
+            return id;
+        }
+        return null;
     }
 
     @Transactional

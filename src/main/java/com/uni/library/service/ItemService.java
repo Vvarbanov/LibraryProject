@@ -1,6 +1,7 @@
 package com.uni.library.service;
 
 import com.uni.library.dto.ItemDTO;
+import com.uni.library.model.Catalogue;
 import com.uni.library.model.Item;
 import com.uni.library.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +32,16 @@ public class ItemService {
         return null;
     }
 
-    public void deleteItemById(Long id) {
-        itemRepository.deleteById(id);
+    public Long deleteItemById(Long id) {
+        if(itemRepository.findById(id).isPresent()) {
+            Catalogue catalogue = itemRepository.findById(id).get().getCatalogue();
+            List<Item> newItems = catalogue.getItems();
+            newItems.remove(itemRepository.findById(id).get());
+            catalogue.setItems(newItems);
+            itemRepository.deleteById(id);
+            return id;
+        }
+        return null;
     }
 
     @Transactional

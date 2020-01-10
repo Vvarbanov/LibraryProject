@@ -2,6 +2,7 @@ package com.uni.library.service;
 
 import com.uni.library.dto.ArticleDTO;
 import com.uni.library.model.Article;
+import com.uni.library.model.Newspaper;
 import com.uni.library.repository.ArticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,8 +32,16 @@ public class ArticleService {
         return null;
     }
 
-    public void deleteArticleById(Long id) {
-        articleRepository.deleteById(id);
+    public Long deleteArticleById(Long id) {
+        if(articleRepository.findById(id).isPresent()) {
+            Newspaper newspaper = articleRepository.findById(id).get().getNewspaper();
+            List<Article> newArticles = newspaper.getArticles();
+            newArticles.remove(articleRepository.findById(id).get());
+            newspaper.setArticles(newArticles);
+            articleRepository.deleteById(id);
+            return id;
+        }
+        return null;
     }
 
     @Transactional

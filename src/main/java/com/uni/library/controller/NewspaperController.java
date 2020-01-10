@@ -43,7 +43,7 @@ public class NewspaperController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteNewspaperById(@PathVariable Long id) {
-        newspaperService.deleteNewspaperById(id);
+    public ResponseEntity deleteNewspaperById(@PathVariable Long id) {
+        return ResponseEntity.ok(newspaperService.deleteNewspaperById(id));
     }
 }

@@ -43,7 +43,7 @@ public class ChapterController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteChapterById(@PathVariable Long id) {
-        chapterService.deleteChapterById(id);
+    public ResponseEntity deleteChapterById(@PathVariable Long id) {
+        return ResponseEntity.ok(chapterService.deleteChapterById(id));
     }
 }

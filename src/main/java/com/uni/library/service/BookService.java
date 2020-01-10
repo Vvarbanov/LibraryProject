@@ -49,8 +49,12 @@ public class BookService {
         return booksByGenre;
     }
 
-    public void deleteBookById(Long id) {
-        bookRepository.deleteById(id);
+    public Long deleteBookById(Long id) {
+        if (bookRepository.findById(id).isPresent()) {
+            bookRepository.deleteById(id);
+            return id;
+        }
+        return null;
     }
 
     @Transactional

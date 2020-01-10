@@ -43,7 +43,7 @@ public class CatalogueController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteCatalogueById(@PathVariable Long id) {
-        catalogueService.deleteCatalogueById(id);
+    public ResponseEntity deleteCatalogueById(@PathVariable Long id) {
+        return ResponseEntity.ok(catalogueService.deleteCatalogueById(id));
     }
 }

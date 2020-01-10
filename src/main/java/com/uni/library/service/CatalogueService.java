@@ -30,8 +30,12 @@ public class CatalogueService {
         return null;
     }
 
-    public void deleteCatalogueById(Long id) {
-        catalogueRepository.deleteById(id);
+    public Long deleteCatalogueById(Long id) {
+        if (catalogueRepository.findById(id).isPresent()) {
+            catalogueRepository.deleteById(id);
+            return id;
+        }
+        return null;
     }
 
     @Transactional

@@ -32,8 +32,16 @@ public class ChapterService {
         return null;
     }
 
-    public void deleteChapterById(Long id) {
-        chapterRepository.deleteById(id);
+    public Long deleteChapterById(Long id) {
+        if(chapterRepository.findById(id).isPresent()) {
+            Book book = chapterRepository.findById(id).get().getBook();
+            List<Chapter> newChapters = book.getChapters();
+            newChapters.remove(chapterRepository.findById(id).get());
+            book.setChapters(newChapters);
+            chapterRepository.deleteById(id);
+            return id;
+        }
+        return null;
     }
 
     @Transactional

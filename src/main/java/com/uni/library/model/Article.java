@@ -9,6 +9,7 @@ import javax.persistence.*;
 @Table(name = "articles")
 public class Article extends AbstractChapter {
 
+    @Lob
     @Column(name = "content")
     private String content;
 
